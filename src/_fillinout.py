@@ -5,6 +5,9 @@ Created on Aug 28, 2014
 '''
 
 import pymel.core as pc
+import site
+site.addsitedir(r'r:/pipe_repo/users/qurban/utilities')
+import appUsageApp
 
 def fill():
     
@@ -36,3 +39,5 @@ def fill():
     pc.setAttr("defaultRenderGlobals.startFrame", start)
     pc.playbackOptions(maxTime=end)
     pc.setAttr("defaultRenderGlobals.endFrame", end)
+    
+    appUsageApp.updateDatabase('fillinout')
