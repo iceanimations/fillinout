@@ -41,3 +41,5 @@ def fill():
     pc.setAttr("defaultRenderGlobals.endFrame", end)
     
     appUsageApp.updateDatabase('fillinout')
+    
+    return start, end
