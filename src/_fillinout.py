@@ -6,6 +6,7 @@ Created on Aug 28, 2014
 
 import pymel.core as pc
 import appUsageApp
+import qutil
 
 def fill():
     
@@ -41,6 +42,8 @@ def fill():
         if not frames:
             pc.warning('No keys found on the selected camera...')
             return
+        
+        qutil.setRenderableCamera(obj)
         
         start = frames[0]
         end = frames[-1]
