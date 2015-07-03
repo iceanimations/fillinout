@@ -8,6 +8,17 @@ import pymel.core as pc
 import appUsageApp
 import qutil
 
+
+def removeOverrides(attr):
+    count = 0
+    for renderLayer in pc.nt.RenderLayer.listAllRenderLayers():
+        try:
+            count += renderLayer.removeAdjustments(attr)
+        except RuntimeError:
+            pass
+    return count
+
+
 def fill():
     
     sel = pc.ls(sl=True)
@@ -53,10 +64,15 @@ def fill():
         pc.warning('Selection should be camera or mesh')
         return
 
+    overridesRemoved = 0
     pc.playbackOptions(minTime=start)
+    overridesRemoved += removeOverrides("defaultRenderGlobals.startFrame")
     pc.setAttr("defaultRenderGlobals.startFrame", start)
     pc.playbackOptions(maxTime=end)
+    overridesRemoved += removeOverrides("defaultRenderGlobals.endFrame")
     pc.setAttr("defaultRenderGlobals.endFrame", end)
+    if overridesRemoved:
+        pc.warning('%s Layer Overrides were removed' % overridesRemoved)
     
     appUsageApp.updateDatabase('fillinout')
     pc.currentTime(start)
