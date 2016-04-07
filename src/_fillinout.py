@@ -6,7 +6,7 @@ Created on Aug 28, 2014
 
 import pymel.core as pc
 import appUsageApp
-import qutil
+import imaya
 
 
 def removeOverrides(attr):
@@ -44,22 +44,18 @@ def fill():
         start = cache.sourceStart.get()
         end = cache.sourceEnd.get()
     elif type(obj) == pc.nt.Camera:
-        if pc.hasAttr(obj, 'in') and pc.hasAttr(obj, 'out'):
-            start = obj.attr('in').get()
-            end = obj.attr('out').get()
-        else:
-            animCurves = pc.listConnections(obj.firstParent(), scn=True, d=False, s=True)
-            if not animCurves:
-                pc.warning('No animation found on the selected camera...')
-                return
-            
-            frames = pc.keyframe(animCurves[0], q=True)
-            if not frames:
-                pc.warning('No keys found on the selected camera...')
-                return
-            start = frames[0]
-            end = frames[-1]
-        qutil.setRenderableCamera(obj)
+        animCurves = pc.listConnections(obj.firstParent(), scn=True, d=False, s=True)
+        if not animCurves:
+            pc.warning('No animation found on the selected camera...')
+            return
+        
+        frames = pc.keyframe(animCurves[0], q=True)
+        if not frames:
+            pc.warning('No keys found on the selected camera...')
+            return
+        start = frames[0]
+        end = frames[-1]
+        imaya.setRenderableCamera(obj)
     else:
         pc.warning('Selection should be camera or mesh')
         return
